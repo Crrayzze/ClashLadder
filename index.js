@@ -18,8 +18,6 @@ CocApi.getPlayerByTag(Crayze)
 
 
 bot.on('message', function(message) {
-    // Google.parse(message)
-    // Ping.parse(message)
     let commandUsed = Google.parse(message) || Ping.parse(message)
     if (message.content === '!yo') {
         message.reply('ca va ?')
@@ -32,6 +30,5 @@ bot.on('guildMemberAdd', function(member) {
     }).catch(console.error)
 })
 
-// Api.start()
 
 bot.login("ODA3MTc3NzA0MDMzODc4MDQ2.YB0M0Q.kGBlviBIMkdoYKWVKJJ51_X82Z4")
