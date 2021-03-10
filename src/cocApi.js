@@ -90,4 +90,21 @@ module.exports = class CocApi {
             console.error(error)
         }
     }
+
+    // Functionnal : OK
+    static async getPlayerByTag(tag) {
+        try {
+      
+            let client = clashApi({
+                token: COC_API_TOKEN 
+            });
+          
+            const player = await client.playerByTag(tag)
+            console.log("this is Player:", player)
+    
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 }
