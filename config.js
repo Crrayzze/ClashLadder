@@ -4,11 +4,12 @@ module.exports = {
     DB_NAME: "discord_clashladder",
     DB_USERNAME: "root",
     DB_PASSWORD: "",
-    
+
     PREFIX: "!",
 
     TEAM_MANAGER_PREFIX: "tm",
     TEAM_MANAGER_CREATE: "create",
+    TEAM_MANAGER_START_MM: "start mm",
     
     PLAYER_MANAGER_PREFIX: "pm",
     PLAYER_MANAGER_CREATE: "create"

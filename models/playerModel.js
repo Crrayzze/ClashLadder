@@ -1,4 +1,4 @@
-const Sequielize = require("sequelize")
+const Sequelize = require("sequelize")
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define("player", {
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING
         },
         hitRate: {
-            type: Sequielize.INTEGER
+            type: Sequelize.INTEGER
         },
         nbTeams: {
             type: Sequelize.INTEGER

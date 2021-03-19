@@ -15,6 +15,9 @@ module.exports =  (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             unique: true
         },
+        lookingForAWar: {
+            type: Sequelize.BOOLEAN
+        },
         win: {
             type: Sequelize.INTEGER
         },
