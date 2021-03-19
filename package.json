@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "JSON": "^1.0.0",
     "clash-of-clans-api": "^0.6.4",
     "crypto": "^1.0.1",
     "discord.js": "^12.3.1",

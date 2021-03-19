@@ -15,9 +15,7 @@ module.exports = class PlayerManger extends Command {
     static action (message) {
         console.log('PlayerManager: select action')
         var input = message.content.slice(PREFIX.length + PLAYER_MANAGER_PREFIX.length + 1).trim()
-        console.log('PlayerManager: input is ' + input)
         if (input.startsWith(PLAYER_MANAGER_CREATE)) {
-            console.log('PlayerManager: input is ' + input)
             let preCleanInput = input.slice(PLAYER_MANAGER_CREATE.length)
             let args = preCleanInput.split(";")
             this.createPlayer(args, message)

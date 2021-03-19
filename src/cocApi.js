@@ -5,16 +5,18 @@ module.exports = class CocApi {
 
     // Functionnal : OK
     static async getClanByTag(tag) {
+        var clan = null
         try {
             let client = clashApi({
                 token: COC_API_TOKEN 
             });
             
-            const clan = await client.clanByTag(tag)
-            console.log("this is clan information:", clan)
-      
+            clan = await client.clanByTag(tag)
+//            console.log("this is clan information:", clan)
+            return clan
         } catch (error) {
             console.error(error)
+            return clan
         }
     }
 

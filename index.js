@@ -23,7 +23,7 @@ const sequelize = new Sequelize("discord_clashladder", "root", "", {
     logging: false
 })
 
-//CocApi.getClanByTag("#2YQPUR2RY")
+//CocApi.getClanByTag("#R2RY")
 //CocApi.getClanMembersByClanTag("#2YQPUR2RY")
 //CocApi.getCurrentWarByClanTag(Redacted)
 //CocApi.getWarlogByClanTag(LastStrike)
