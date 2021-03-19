@@ -21,5 +21,7 @@ module.exports =  (sequelize, DataTypes) => {
         loose: {
             type: Sequelize.INTEGER
         }
+    }, {
+        tableName: 'team'
     })
 }

@@ -13,11 +13,14 @@ const Redacted = "#228L2YQ2L"
 const Crayze = "#Y9LC99QJ"
 
 const {
+    DB_NAME,
+    DB_USERNAME,
+    DB_PASSWORD,
     BOT_TOKEN,
     PREFIX
 } = require ("./config")
 
-const sequelize = new Sequelize("discord_clashladder", "root", "", {
+const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     host: "localhost",
     dialect: "mysql",
     logging: false
@@ -32,8 +35,10 @@ const sequelize = new Sequelize("discord_clashladder", "root", "", {
 
 
 bot.on('message', function(message) {
+    if (message.author.bot)
+        return
     if (message.content.startsWith(PREFIX)) {
-        let commandUsed = Google.parse(message) || Ping.parse(message) || TeamManager.parse(message) || PlayerManager.parse(message)
+        let commandUsed = TeamManager.parse(message, sequelize) || PlayerManager.parse(message, sequelize)
     }
 })
 

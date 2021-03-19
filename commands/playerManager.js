@@ -1,4 +1,6 @@
 const Command = require('./commands')
+const CocApi = require('../src/cocApi')
+const Tool = require('../tool_box/tool')
 const {
     PREFIX,
     PLAYER_MANAGER_PREFIX,
@@ -12,7 +14,7 @@ module.exports = class PlayerManger extends Command {
         return message.content.startsWith(PREFIX + PLAYER_MANAGER_PREFIX)
     }
 
-    static action (message) {
+    static action (message, sequelize) {
         console.log('PlayerManager: select action')
         var input = message.content.slice(PREFIX.length + PLAYER_MANAGER_PREFIX.length + 1).trim()
         if (input.startsWith(PLAYER_MANAGER_CREATE)) {
@@ -25,13 +27,20 @@ module.exports = class PlayerManger extends Command {
     /*
     * Permet de créer un player -> !pm create nom;playerTagInGame
     */
-    static createPlayer (args, message) {
+    static async createPlayer (args, message) {
         if (args.length == 2 && args[0].length > 0 && args[1].length > 0) {
             
             var playerName = args[0]
             var playerTag = args[1]
+            var playerId = Tool.createRandomUniqueId()
 
-            message.reply('The player : '+ playerName + ' has been created with the tag ' + playerTag +'.')
+            if (await this.checkIfPlayerExist(playerTag)) {
+                message.reply('The player : '+ playerName + ' has been created with the tag ' + playerTag + '.')
+            }
+            else {
+                message.reply("There is a problem with the player tag")
+            }
+
         }
         else {
             message.reply('Mhhhhh i think something is missing in your request !')
@@ -39,13 +48,24 @@ module.exports = class PlayerManger extends Command {
     }
 
     /*
-    * Permet de rejoindre une team -> !tm join playerId;teamSecretKey
+    * Permet de rejoindre une team -> !pm join playerId;teamSecretKey
     */
     static joinTeam (args, message) {
 
     }
 
+    /*
+    * Permet de quitter une team -> !pm leave playerId;teamSecretKey
+    */
     static leaveTeam (args, message) {
 
+    }
+
+    static async checkIfPlayerExist (tag) {
+        var player = await CocApi.getPlayerByTag(tag)
+
+        if (player == null)
+            return false
+        return true
     }
 }

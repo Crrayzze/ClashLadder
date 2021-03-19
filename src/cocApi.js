@@ -12,11 +12,9 @@ module.exports = class CocApi {
             });
             
             clan = await client.clanByTag(tag)
-//            console.log("this is clan information:", clan)
             return clan
         } catch (error) {
             console.error(error)
-            return clan
         }
     }
 
@@ -31,7 +29,8 @@ module.exports = class CocApi {
           
             const clanMembers = await client.clanMembersByTag(tag)
             console.log("this is clan members:", clanMembers)
-    
+            return clanMembers
+            
         } catch (error) {
             console.error(error)
         } 
@@ -48,6 +47,7 @@ module.exports = class CocApi {
           
             const currentWar = await client.clanCurrentWarByTag(tag)
             console.log("this is current war:", currentWar)
+            return currentWar
     
         } catch (error) {
             console.error(error)
@@ -65,6 +65,7 @@ module.exports = class CocApi {
           
             const warlog = await client.clanWarlogByTag(tag)
             console.log("this is warlog:", warlog)
+            return warlog
     
         } catch (error) {
             console.error(error)
@@ -88,6 +89,8 @@ module.exports = class CocApi {
             // client
             //    .clanLeagueWars(response.rounds[0].warTags[0])
 
+            return clanWarLeagues
+
         } catch (error) {
             console.error(error)
         }
@@ -103,6 +106,8 @@ module.exports = class CocApi {
           
             const player = await client.playerByTag(tag)
             console.log("this is Player:", player)
+
+            return player
     
         } catch (error) {
             console.error(error)

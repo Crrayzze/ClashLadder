@@ -1,8 +1,8 @@
 module.exports = class Command {
 
-    static parse (message) {
+    static parse (message, sequelize) {
         if (this.match(message)) {
-            this.action(message)
+            this.action(message, sequelize)
             return true
         }
         return false
