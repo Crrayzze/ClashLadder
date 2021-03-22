@@ -10,6 +10,7 @@ module.exports = {
     TEAM_MANAGER_PREFIX: "tm",
     TEAM_MANAGER_CREATE: "create",
     TEAM_MANAGER_START_MM: "start mm",
+    TEAM_MANAGER_STOP_MM: "stop mm",
     
     PLAYER_MANAGER_PREFIX: "pm",
     PLAYER_MANAGER_CREATE: "create"

@@ -7,7 +7,8 @@ const {
     PREFIX,
     TEAM_MANAGER_PREFIX,
     TEAM_MANAGER_CREATE,
-    TEAM_MANAGER_START_MM
+    TEAM_MANAGER_START_MM,
+    TEAM_MANAGER_STOP_MM
 } = require("../config")
 
 module.exports = class TeamManager extends Command {
@@ -33,6 +34,11 @@ module.exports = class TeamManager extends Command {
             let args = preCleanInput.split(";")
             this.startLookingForAWar(args, message, teamModel)
         }
+        if (input.startsWith(TEAM_MANAGER_STOP_MM)) {
+            let preCleanInput = input.slice(TEAM_MANAGER_STOP_MM.length)
+            let args = preCleanInput.split(";")
+            this.stopLookingForAWar(args, message, teamModel)
+        }
     }
 
     /*
@@ -42,19 +48,19 @@ module.exports = class TeamManager extends Command {
 
         if (args.length == 3 && args[0].length > 0 && args[1].length > 0 && args[2].length > 0 ) {
             
-            var teamName = args[0]
-            var clanTag = args[1]
-            var teamLeaderTag = args[2]
+            var teamName = args[0].trim()
+            var clanTag = args[1].trim()
+            var teamLeaderTag = args[2].trim()
             var newSecretKey = Tool.createRandomUniqueId()
 
             if (await this.checkIfClanExist(clanTag)) {
                 teamModel.create({
-                    name: teamName,
+                    teamName: teamName,
                     clanTagInGame: clanTag,
                     leaderTag: teamLeaderTag,
-                    secretKey:newSecretKey
+                    secretKey: newSecretKey
                 }).then(() => {
-                    message.author.send('The team : '+ teamName + ' has been created with the tag ' + clanTag +'.\nThe team leader is ' + teamLeaderTag + ' And your secretKey is ' + newSecretKey)
+                    message.author.send('The team : ['+ teamName + '] has been created with the tag [' + clanTag +'].\nThe team leader is [' + teamLeaderTag + '] And your secretKey is [' + newSecretKey + ']')
                 }).catch(err => {
                     message.author.send('Something went wrong')
                     console.log(err)
@@ -79,24 +85,25 @@ module.exports = class TeamManager extends Command {
     /*
     * Permet d'activer la recherche de match -> !tm start mm teamSecretKey
     */
-    static startLookingForAWar (args, message, teamModel) {
+    static async startLookingForAWar (args, message, teamModel) {
 
         if (args.length == 1) {
 
-            var currentSecretKey = args[0]
+            var currentSecretKey = args[0].trim()
             var teamName = null
             var teamClanTagInGame = null
             var teamLookForAWar = null
 
-            teamModel.findOne({
-                attributes: ["name", "clanTagInGame", "lookingForAWar"],
+            await teamModel.findOne({
                 where: {
                     secretKey: currentSecretKey
-                }
-            }).then(response => {
-                teamName = response.name
+                },
+                raw: true
+            }).then(response =>{
+                teamName = response.teamName
                 teamClanTagInGame = response.clanTagInGame
                 teamLookForAWar = response.lookingForAWar
+
             }).catch(error => {
                 console.log(error)
                 message.author.send("Something went wrong")            
@@ -107,14 +114,79 @@ module.exports = class TeamManager extends Command {
                     message.author.send("You are already in matchmaking lookin for a war !")
                     return
                 }
-                message.author.send("matchmaking activated !  GL !")
+                else {
+                    await teamModel.update(
+                        {lookingForAWar: true},{
+                        where: {
+                            secretKey: currentSecretKey
+                        }
+                    }).then(response => {
+                        message.author.send("matchmaking activated !  GL !")
+                        console.log(response)
+                    }).catch(error => {
+                        message.author.send("Error during matchmaking :/")
+                        console.log(error)          
+                    })      
+                }
             }
-
         }
         else {
             message.author.send('Mhhhhh i think something is missing in your request !')
         }
     }
+
+        /*
+    * Permet de désactiver la recherche de match -> !tm stop mm teamSecretKey
+    */
+        static async stopLookingForAWar (args, message, teamModel) {
+
+            if (args.length == 1) {
+    
+                var currentSecretKey = args[0].trim()
+                var teamName = null
+                var teamClanTagInGame = null
+                var teamLookForAWar = null
+    
+                await teamModel.findOne({
+                    where: {
+                        secretKey: currentSecretKey
+                    },
+                    raw: true
+                }).then(response =>{
+                    teamName = response.teamName
+                    teamClanTagInGame = response.clanTagInGame
+                    teamLookForAWar = response.lookingForAWar
+    
+                }).catch(error => {
+                    console.log(error)
+                    message.author.send("Something went wrong")            
+                })
+    
+                if (teamName != null && teamClanTagInGame != null && teamLookForAWar != null) {
+                    if (!teamLookForAWar) {
+                        message.author.send("You are not already in matchmaking lookin for a war !")
+                        return
+                    }
+                    else {
+                        await teamModel.update(
+                            {lookingForAWar: false},{
+                            where: {
+                                secretKey: currentSecretKey
+                            }
+                        }).then(response => {
+                            message.author.send("matchmaking desactivated !  See you soon ;)")
+                            console.log(response)
+                        }).catch(error => {
+                            message.author.send("Error during matchmaking :/")
+                            console.log(error)          
+                        })      
+                    }
+                }
+            }
+            else {
+                message.author.send('Mhhhhh i think something is missing in your request !')
+            }
+        }
 
     static async checkIfClanExist(tag) {
         var clan = await CocApi.getClanByTag(tag)
