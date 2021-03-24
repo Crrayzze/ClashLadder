@@ -31,6 +31,9 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     logging: false
 })
 
+    // CocApi.getCurrentWarByClanTag(ClanTest)
+    
+
 //CocApi.getClanByTag("#R2RY")
 //CocApi.getClanMembersByClanTag("#2YQPUR2RY")
 //CocApi.getCurrentWarByClanTag(ClanTest)
@@ -56,8 +59,10 @@ bot.on('guildMemberAdd', function(member) {
 bot.on('ready', () =>{
     setInterval(() => {
         Matchmaking.checkIfThereIsMatch(sequelize, bot)
+    }, 60000)
+    setInterval(() => {
         WarManager.execute(sequelize, bot)
-    }, 10000)
+    }, 60000)
 })
 
 bot.login(BOT_TOKEN)

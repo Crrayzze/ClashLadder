@@ -43,6 +43,14 @@ module.exports =  (sequelize, DataTypes) => {
         loose: {
             type: Sequelize.INTEGER,
             field: "loose"
+        },
+        draw: {
+            type: Sequelize.INTEGER,
+            field: "draw"
+        },
+        lastOpponentId: {
+            type: Sequelize.INTEGER,
+            field: "lastOpponentId"
         }
 
     }, {

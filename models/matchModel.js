@@ -12,7 +12,7 @@ module.exports =  (sequelize, DataTypes) => {
         idTeamB: {
             type: Sequelize.INTEGER
         },
-        isRunning: {
+        isEnded: {
             type: Sequelize.BOOLEAN
         }
     }, {

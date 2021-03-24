@@ -42,7 +42,6 @@ module.exports = class Matchmaking {
         })
         .catch(error => {
             console.log(error)
-            message.author.send("Something went wrong")            
         })
 
 
@@ -55,7 +54,14 @@ module.exports = class Matchmaking {
         var i = 0
 
         while (i < nbTeam && (nbTeam % 2 == 0) && nbTeam >= 2) {
-            await this.createMatch(sequelize, teamModel, bot, response[i], response[i + 1], matchModel)
+            if (response[i].lastOpponentId != response[i + 1].id || response[i].id != response[i + 1].lastOpponentId) {
+                await this.createMatch(sequelize, teamModel, bot, response[i], response[i + 1], matchModel)
+            }
+            else {
+                if (i + 2 < nbTeam) {
+                    await this.createMatch(sequelize, teamModel, bot, response[i], response[i + 2], matchModel)
+                }
+            }
             i += 2
         } 
     }
@@ -66,7 +72,7 @@ module.exports = class Matchmaking {
         await matchModel.create({
             idTeamA: teamA.id,
             idTeamB: teamB.id,
-            isRunning: true
+            isEnded: false
         }).then(() => {
             console.log("Match started between " + teamA.teamName + " and " + teamB.teamName)
             done = true

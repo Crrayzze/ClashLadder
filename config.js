@@ -15,5 +15,9 @@ module.exports = {
     TEAM_MANAGER_STOP_MM: "stop mm",
     
     PLAYER_MANAGER_PREFIX: "pm",
-    PLAYER_MANAGER_CREATE: "create"
+    PLAYER_MANAGER_CREATE: "create",
+
+    TEAM_A_WIN: "teamA win",
+    TEAM_B_WIN: "teamB win",
+    DRAW: "draw"
 }
