@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const CocApi =  require('./cocApi')
 const ClanTest = "#2LRPOU9GC"
 const {
+    DEFAULT_CHANNEL,
     TEAM_A_WIN,
     TEAM_B_WIN,
     DRAW
@@ -85,34 +86,38 @@ module.exports = class WarManager {
             var currentWar = await CocApi.getCurrentWarByClanTag(teamA.clanTagInGame)
             
             if (currentWar.state == "warEnded") {
+
                 if (currentWar.opponent.tag == teamB.clanTagInGame) {
 
-                    // console.log("ended at:" + war.endTime)
-                    // console.log("createdAt:" + war.cre)
                     // Team A WIN
                     if (currentWar.clan.stars > currentWar.opponent.stars) {
                         console.log("The winner is " + teamA.teamName)
+                        this.showResultWin(teamA, teamB, bot, currentWar.clan, currentWar.opponent)
                         this.updateWarStatus(war, teamA, teamB, TEAM_A_WIN, teamModel, matchModel, bot, sequelize)
                     }
                     if (currentWar.clan.stars == currentWar.opponent.stars && currentWar.clan.destructionPercentage > currentWar.opponent.destructionPercentage) {
-                        console.log("The winner is " + teamA.teamName)    
+                        console.log("The winner is " + teamA.teamName)
+                        this.showResultWin(teamA, teamB, bot, currentWar.clan, currentWar.opponent)
                         this.updateWarStatus(war, teamA, teamB, TEAM_A_WIN, teamModel, matchModel, bot, sequelize)                    
                     }
 
                     // Team B WIN
                     if (currentWar.clan.stars < currentWar.opponent.stars) {
                         console.log("The winner is " + teamB.teamName)
+                        this.showResultWin(teamB, teamA, bot, currentWar.opponent, currentWar.clan)
                         this.updateWarStatus(war, teamA, teamB, TEAM_B_WIN, teamModel, matchModel, bot, sequelize)
 
                     }
                     if (currentWar.clan.stars == currentWar.opponent.stars && currentWar.clan.destructionPercentage < currentWar.opponent.destructionPercentage) {
-                        console.log("The winner is " + teamB.teamName)                        
+                        console.log("The winner is " + teamB.teamName) 
+                        this.showResultWin(teamB, teamA, bot, currentWar.opponent, currentWar.clan)                      
                         this.updateWarStatus(war, teamA, teamB, TEAM_B_WIN, teamModel, matchModel, bot, sequelize)
                     }
 
                     // DRAW
                     if (currentWar.clan.stars == currentWar.opponent.stars && currentWar.clan.destructionPercentage == currentWar.opponent.destructionPercentage) {
-                        console.log("It's a Draw !")                        
+                        console.log("It's a Draw !")      
+                        this.showResultWin(teamA, teamB, bot, currentWar.clan, currentWar.opponent)                  
                         this.updateWarStatus(war, teamA, teamB, DRAW, teamModel, matchModel, bot, sequelize)
                     }
 
@@ -256,16 +261,57 @@ module.exports = class WarManager {
 
     }
 
+    static showResultWin(winner, looser, bot, winnerClan, looserClan) {
 
-    // var currentWar = await CocApi.getCurrentWarByClanTag(ClanTest)
-    // console.log("\n\n\n\n\n\nCURRENT WAR")
-    // console.log("\n\nthis is the current war:\n", currentWar)
-    // console.log("clanA: [" + currentWar.clan.tag + "]")
-    // console.log("nbStars: [" + currentWar.clan.stars + "]")
-    // console.log("\n\nclanB: [" + currentWar.opponent.tag + "]")
-    // console.log("nbStars:[" + currentWar.opponent.stars + "]")
-    // console.log("\n\nThis is the war state: [" + currentWar.state + "]")
+        const channel = bot.channels.cache.find(channel => channel.name === DEFAULT_CHANNEL)
 
+        channel.send(
+            {embed: {
+                color: "eaa403",
+                author: {
+                    name: bot.user.username,
+                    icon_url: bot.user.avatarURL()
+                },
+                thumbnail: {
+                    url: bot.user.avatarURL()
+                },
+                title: "RESULT: " + winner.teamName + " Vs " + looser.teamName,
+                description: winner.teamName + " won the war against " + looser.teamName + ".\n" +
+                    winnerClan.stars + "⭐️ | " + looserClan.stars + "⭐️\n" +
+                    winnerClan.destructionPercentage + "% | " + looserClan.destructionPercentage + "%",
+                timestamp: new Date(),
+                footer: {
+                    icon_url: bot.user.avatarURL(),
+                    text: "© " + bot.user.username
+                }
+            }})
 
+    }
 
+    static showResultDraw(winner, looser, bot, winnerClan, looserClan) {
+
+        const channel = bot.channels.cache.find(channel => channel.name === DEFAULT_CHANNEL)
+
+        channel.send(
+            {embed: {
+                color: "eaa403",
+                author: {
+                    name: bot.user.username,
+                    icon_url: bot.user.avatarURL()
+                },
+                thumbnail: {
+                    url: bot.user.avatarURL()
+                },
+                title: "RESULT: " + winner.teamName + " Vs " + looser.teamName,
+                description: winner.teamName + " Draw against " + looser.teamName + ".\n" +
+                    winnerClan.stars + "⭐️ | " + looserClan.stars + "⭐️\n" +
+                    winnerClan.destructionPercentage + "% | " + looserClan.destructionPercentage + "%",
+                timestamp: new Date(),
+                footer: {
+                    icon_url: bot.user.avatarURL(),
+                    text: "© " + bot.user.username
+                }
+            }})
+
+    }
 }

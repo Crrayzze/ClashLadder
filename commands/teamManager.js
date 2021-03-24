@@ -4,6 +4,7 @@ const Tool = require('../tool_box/tool')
 const Command = require('./commands')
 const Sequelize = require('sequelize')
 const {
+    DEFAULT_CHANNEL,
     PREFIX,
     TEAM_MANAGER_PREFIX,
     TEAM_MANAGER_CREATE,
@@ -18,7 +19,7 @@ module.exports = class TeamManager extends Command {
         return message.content.startsWith(PREFIX + TEAM_MANAGER_PREFIX)
     }
 
-    static action (message, sequelize) {
+    static action (message, sequelize, bot) {
         console.log('TeamManager: select action')
 
         const teamModel =  require("../models/teamModel")(sequelize, Sequelize.DataTypes)
@@ -27,24 +28,24 @@ module.exports = class TeamManager extends Command {
         if (input.startsWith(TEAM_MANAGER_CREATE)) {
             let preCleanInput = input.slice(TEAM_MANAGER_CREATE.length)
             let args = preCleanInput.split(";")
-            this.createTeam(args, message, teamModel)
+            this.createTeam(args, message, teamModel, bot)
         }
         if (input.startsWith(TEAM_MANAGER_START_MM)) {
             let preCleanInput = input.slice(TEAM_MANAGER_START_MM.length)
             let args = preCleanInput.split(";")
-            this.startLookingForAWar(args, message, teamModel)
+            this.startLookingForAWar(args, message, teamModel, bot)
         }
         if (input.startsWith(TEAM_MANAGER_STOP_MM)) {
             let preCleanInput = input.slice(TEAM_MANAGER_STOP_MM.length)
             let args = preCleanInput.split(";")
-            this.stopLookingForAWar(args, message, teamModel)
+            this.stopLookingForAWar(args, message, teamModel, bot)
         }
     }
 
     /*
     * Permet de créer une team -> !tm create nom;clanTag;leaderTag
     */
-    static async createTeam (args, message, teamModel) {
+    static async createTeam (args, message, teamModel, bot) {
 
         if (args.length == 3 && args[0].length > 0 && args[1].length > 0 && args[2].length > 0 ) {
             
@@ -60,7 +61,27 @@ module.exports = class TeamManager extends Command {
                     leaderTag: teamLeaderTag,
                     secretKey: newSecretKey
                 }).then(() => {
-                    message.author.send('The team : ['+ teamName + '] has been created with the tag [' + clanTag +'].\nThe team leader is [' + teamLeaderTag + '] And your secretKey is [' + newSecretKey + ']')
+                    message.author.send(
+                        {embed: {
+                            color: "eaa403",
+                            author: {
+                                name: bot.user.username,
+                                icon_url: bot.user.avatarURL()
+                            },
+                            thumbnail: {
+                                url: bot.user.avatarURL()
+                            },
+                            title: "Team created",
+                            description: teamName + " has been created and linked to the clan " + clanTag + "\nThe team leader is: " + teamLeaderTag + "\nYour secret key is " + newSecretKey + ". Please don't loose it, it will be necessary later!\n Welcome in CLashLadder!",
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: bot.user.avatarURL(),
+                                text: "© " + bot.user.username
+                            }
+                
+                        }}
+                    )
+                        //'The team : ['+ teamName + '] has been created with the tag [' + clanTag +'].\nThe team leader is [' + teamLeaderTag + '] And your secretKey is [' + newSecretKey + ']')
                 }).catch(err => {
                     message.author.send('Something went wrong')
                     console.log(err)
@@ -85,7 +106,7 @@ module.exports = class TeamManager extends Command {
     /*
     * Permet d'activer la recherche de match -> !tm start mm teamSecretKey
     */
-    static async startLookingForAWar (args, message, teamModel) {
+    static async startLookingForAWar (args, message, teamModel, bot) {
 
         if (args.length == 1) {
 
@@ -114,9 +135,46 @@ module.exports = class TeamManager extends Command {
             if (teamName != null && teamClanTagInGame != null && teamLookForAWar != null && teamInWar != null) {
                 if (teamLookForAWar || teamInWar) {
                     if (teamLookForAWar)
-                        message.author.send("You are already in matchmaking lookin for a war !")
+                        message.author.send(
+                            {embed: {
+                                color: "eaa403",
+                                author: {
+                                    name: bot.user.username,
+                                    icon_url: bot.user.avatarURL()
+                                },
+                                thumbnail: {
+                                    url: bot.user.avatarURL()
+                                },
+                                title: "Matchmaking: error",
+                                description: "You are already in matchmaking looking for a war!",
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: bot.user.avatarURL(),
+                                    text: "© " + bot.user.username
+                                }
+                            }}    
+                        )
                     if (teamInWar)
-                        message.author.send("You are already in  a war !")
+                        message.author.send(
+                            {embed: {
+                                color: "eaa403",
+                                author: {
+                                    name: bot.user.username,
+                                    icon_url: bot.user.avatarURL()
+                                },
+                                thumbnail: {
+                                    url: bot.user.avatarURL()
+                                },
+                                title: "Matchmaking: error",
+                                description: "You are already in  a war!",
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: bot.user.avatarURL(),
+                                    text: "© " + bot.user.username
+                                }
+                            }}
+                            )
+                            //"You are already in  a war !")
                     return
                 }
                 else {
@@ -126,7 +184,25 @@ module.exports = class TeamManager extends Command {
                             secretKey: currentSecretKey
                         }
                     }).then(response => {
-                        message.author.send("matchmaking activated !  GL !")
+                        message.author.send(
+                            {embed: {
+                                color: "eaa403",
+                                author: {
+                                    name: bot.user.username,
+                                    icon_url: bot.user.avatarURL()
+                                },
+                                thumbnail: {
+                                    url: bot.user.avatarURL()
+                                },
+                                title: "Matchmaking",
+                                description: "Matchmaking activated!\nYou are now on the waiting list. Please wait...",
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: bot.user.avatarURL(),
+                                    text: "© " + bot.user.username
+                                }
+                            }}
+                        )
                         console.log(response)
                     }).catch(error => {
                         message.author.send("Error during matchmaking :/")
@@ -143,7 +219,7 @@ module.exports = class TeamManager extends Command {
         /*
     * Permet de désactiver la recherche de match -> !tm stop mm teamSecretKey
     */
-        static async stopLookingForAWar (args, message, teamModel) {
+        static async stopLookingForAWar (args, message, teamModel, bot) {
 
             if (args.length == 1) {
     
@@ -169,7 +245,25 @@ module.exports = class TeamManager extends Command {
     
                 if (teamName != null && teamClanTagInGame != null && teamLookForAWar != null) {
                     if (!teamLookForAWar) {
-                        message.author.send("You are not already in matchmaking lookin for a war !")
+                        message.author.send(
+                            {embed: {
+                                color: "eaa403",
+                                author: {
+                                    name: bot.user.username,
+                                    icon_url: bot.user.avatarURL()
+                                },
+                                thumbnail: {
+                                    url: bot.user.avatarURL()
+                                },
+                                title: "Matchmaking: error",
+                                description: "You are not already in matchmaking!",
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: bot.user.avatarURL(),
+                                    text: "© " + bot.user.username
+                                }
+                            }}    
+                        )
                         return
                     }
                     else {
@@ -179,10 +273,43 @@ module.exports = class TeamManager extends Command {
                                 secretKey: currentSecretKey
                             }
                         }).then(response => {
-                            message.author.send("matchmaking desactivated !  See you soon ;)")
+                            message.author.send(
+                            {embed: {
+                                color: "eaa403",
+                                author: {
+                                    name: bot.user.username,
+                                    icon_url: bot.user.avatarURL()
+                                },
+                                thumbnail: {
+                                    url: bot.user.avatarURL()
+                                },
+                                title: "Matchmaking",
+                                description: "Matchmaking is now desactivated. See you soon 😉",
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: bot.user.avatarURL(),
+                                    text: "© " + bot.user.username
+                                }
+                            }})
                             console.log(response)
                         }).catch(error => {
-                            message.author.send("Error during matchmaking :/")
+                            message.author.send({embed: {
+                                color: "eaa403",
+                                author: {
+                                    name: bot.user.username,
+                                    icon_url: bot.user.avatarURL()
+                                },
+                                thumbnail: {
+                                    url: bot.user.avatarURL()
+                                },
+                                title: "Matchmaking: error",
+                                description: "Error during the Matchmaking 😓",
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: bot.user.avatarURL(),
+                                    text: "© " + bot.user.username
+                                }
+                            }})
                             console.log(error)          
                         })      
                     }
