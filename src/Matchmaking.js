@@ -42,7 +42,6 @@ module.exports = class Matchmaking {
         })
         .catch(error => {
             console.log(error)
-            message.author.send("Something went wrong")            
         })
 
 
@@ -55,7 +54,14 @@ module.exports = class Matchmaking {
         var i = 0
 
         while (i < nbTeam && (nbTeam % 2 == 0) && nbTeam >= 2) {
-            await this.createMatch(sequelize, teamModel, bot, response[i], response[i + 1], matchModel)
+            if (response[i].lastOpponentId != response[i + 1].id || response[i].id != response[i + 1].lastOpponentId) {
+                await this.createMatch(sequelize, teamModel, bot, response[i], response[i + 1], matchModel)
+            }
+            else {
+                if (i + 2 < nbTeam) {
+                    await this.createMatch(sequelize, teamModel, bot, response[i], response[i + 2], matchModel)
+                }
+            }
             i += 2
         } 
     }
@@ -66,9 +72,9 @@ module.exports = class Matchmaking {
         await matchModel.create({
             idTeamA: teamA.id,
             idTeamB: teamB.id,
-            isRunning: true
+            isEnded: false
         }).then(() => {
-            console.log("Match started between " + teamA.teamName + " and " + teamB.teamName)
+//            console.log("Match started between " + teamA.teamName + " and " + teamB.teamName)
             done = true
         }).catch(error => {
             console.log(error)
@@ -84,10 +90,10 @@ module.exports = class Matchmaking {
                     id: teamA.id
                 }
             }).then(response => {
-                console.log("GL for the match against " + teamB.teamName)
+//                console.log("GL for the match against " + teamB.teamName)
                 console.log(response)
             }).catch(error => {
-                console.log("Error during match creation :/")
+//                console.log("Error during match creation :/")
                 console.log(error)          
             })  
             
@@ -100,18 +106,38 @@ module.exports = class Matchmaking {
                     id: teamB.id
                 }
             }).then(response => {
-                console.log("GL for the match against " + teamA.teamName)
+//                console.log("GL for the match against " + teamA.teamName)
                 console.log(response)
             }).catch(error => {
-                console.log("Error during match creation :/")
+//                console.log("Error during match creation :/")
                 console.log(error)          
             })
 
             const channel = bot.channels.cache.find(channel => channel.name === DEFAULT_CHANNEL)
-            channel.send("The war between " + teamA.teamName + " and " + teamB.teamName + " will start soon.\n" +
-                "The leader of " + teamA.teamName + " is " + teamA.leaderTag + " and the leader of " + teamB.teamName + " is " + teamB.leaderTag + "\n" +
-                teamA.teamName + " will play at " + teamA.clanTagInGame + " and " + teamB.teamName + " will play at " + teamB.clanTagInGame + "\n" +
-                "GOOD LUCK to both teams !")
+            channel.send(
+                {embed: {
+                    color: "eaa403",
+                    author: {
+                        name: bot.user.username,
+                        icon_url: bot.user.avatarURL()
+                    },
+                    thumbnail: {
+                        url: bot.user.avatarURL()
+                    },
+                    title: teamA.teamName + " Vs " + teamB.teamName,
+                    description: teamA.teamName + "'s leader is " + teamA.leaderTag + " and " + teamB.teamName + "'s leader is " + teamB.leaderTag + "\n" +
+                        teamA.teamName + " will play the war at " + teamA.clanTagInGame + " and " + teamB.teamName + " will be at " + teamB.clanTagInGame + "\n" +
+                        "Good luck!",
+                    timestamp: new Date(),
+                    footer: {
+                        icon_url: bot.user.avatarURL(),
+                        text: "© " + bot.user.username
+                    }
+                }})
+                // "The war between " + teamA.teamName + " and " + teamB.teamName + " will start soon.\n" +
+                // "The leader of " + teamA.teamName + " is " + teamA.leaderTag + " and the leader of " + teamB.teamName + " is " + teamB.leaderTag + "\n" +
+                // teamA.teamName + " will play at " + teamA.clanTagInGame + " and " + teamB.teamName + " will play at " + teamB.clanTagInGame + "\n" +
+                // "GOOD LUCK to both teams !")
 
         }
     }

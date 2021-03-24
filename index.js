@@ -1,10 +1,8 @@
 const Discord = require('discord.js')
 const bot = new Discord.Client()
-const Google = require('./commands/google')
-const CocApi = require('./src/cocApi')
-const Ping = require('./commands/ping')
 const TeamManager = require('./commands/teamManager')
 const PlayerManager =  require('./commands/playerManager')
+const Ranking = require('./commands/ranking')
 const clashApi = require('clash-of-clans-api')
 const Sequelize = require("sequelize")
 const Matchmaking = require("./src/Matchmaking")
@@ -31,6 +29,9 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     logging: false
 })
 
+    // CocApi.getCurrentWarByClanTag(ClanTest)
+    
+
 //CocApi.getClanByTag("#R2RY")
 //CocApi.getClanMembersByClanTag("#2YQPUR2RY")
 //CocApi.getCurrentWarByClanTag(ClanTest)
@@ -43,21 +44,17 @@ bot.on('message', function(message) {
     if (message.author.bot)
         return
     if (message.content.startsWith(PREFIX)) {
-        let commandUsed = TeamManager.parse(message, sequelize) || PlayerManager.parse(message, sequelize)
+        let commandUsed = TeamManager.parse(message, sequelize, bot) || PlayerManager.parse(message, sequelize, bot) || Ranking.parse(message, sequelize, bot)
     }
-})
-
-bot.on('guildMemberAdd', function(member) {
-    member.createDM().then(function (channel) {
-        return channel.send('Bienvenue sur ce serveur ' + member.displayName)
-    }).catch(console.error)
 })
 
 bot.on('ready', () =>{
     setInterval(() => {
         Matchmaking.checkIfThereIsMatch(sequelize, bot)
+    }, 60000)
+    setInterval(() => {
         WarManager.execute(sequelize, bot)
-    }, 10000)
+    }, 60000)
 })
 
 bot.login(BOT_TOKEN)
