@@ -29,6 +29,9 @@ module.exports =  (sequelize, DataTypes) => {
             type: Sequelize.BOOLEAN,
             field: "lookingForAWar"
         },
+        inWar: {
+            type: Sequelize.BOOLEAN
+        },
         elo: {
             type: Sequelize.INTEGER,
             field: "elo"

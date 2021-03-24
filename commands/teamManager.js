@@ -93,6 +93,7 @@ module.exports = class TeamManager extends Command {
             var teamName = null
             var teamClanTagInGame = null
             var teamLookForAWar = null
+            var teamInWar = false
 
             await teamModel.findOne({
                 where: {
@@ -103,15 +104,19 @@ module.exports = class TeamManager extends Command {
                 teamName = response.teamName
                 teamClanTagInGame = response.clanTagInGame
                 teamLookForAWar = response.lookingForAWar
+                teamInWar = response.inWar
 
             }).catch(error => {
                 console.log(error)
                 message.author.send("Something went wrong")            
             })
 
-            if (teamName != null && teamClanTagInGame != null && teamLookForAWar != null) {
-                if (teamLookForAWar) {
-                    message.author.send("You are already in matchmaking lookin for a war !")
+            if (teamName != null && teamClanTagInGame != null && teamLookForAWar != null && teamInWar != null) {
+                if (teamLookForAWar || teamInWar) {
+                    if (teamLookForAWar)
+                        message.author.send("You are already in matchmaking lookin for a war !")
+                    if (teamInWar)
+                        message.author.send("You are already in  a war !")
                     return
                 }
                 else {

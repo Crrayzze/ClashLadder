@@ -1,6 +1,8 @@
 module.exports = {
     BOT_TOKEN: "ODA3MTc3NzA0MDMzODc4MDQ2.YB0M0Q.kGBlviBIMkdoYKWVKJJ51_X82Z4",
 
+    DEFAULT_CHANNEL: "cmd-clashladder",
+
     DB_NAME: "discord_clashladder",
     DB_USERNAME: "root",
     DB_PASSWORD: "",

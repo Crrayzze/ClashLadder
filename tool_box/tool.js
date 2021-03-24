@@ -8,4 +8,10 @@ module.exports = class Tool {
         return  Math.random().toString(36).substr(2, 8).toLocaleUpperCase()
     }
 
+    static sendPrivateMessage(bot, toUser, message) {
+        bot.fetchUser(toUser, false).then((user) => {
+            user.send(message)
+        })
+    }
+
 }

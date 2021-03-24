@@ -46,7 +46,7 @@ module.exports = class CocApi {
             });
           
             const currentWar = await client.clanCurrentWarByTag(tag)
-            console.log("this is current war:", currentWar)
+
             return currentWar
     
         } catch (error) {
@@ -64,7 +64,10 @@ module.exports = class CocApi {
             });
           
             const warlog = await client.clanWarlogByTag(tag)
-            console.log("this is warlog:", warlog)
+            // console.log("\n\n\n\n\n\n\nWARLOG")
+            // console.log("this is warlog:", warlog)
+            // console.log("This is the clan:", warlog.clan)
+            // console.log("This is the opponent clan:", warlog.opponent)
             return warlog
     
         } catch (error) {
