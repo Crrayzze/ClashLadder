@@ -54,8 +54,6 @@ module.exports = class WarManager {
 
     static async warTracking(sequelize, teamModel, matchModel, bot, war) {
 
-
-
         var idTeamA = war.idTeamA
         var idTeamB = war.idTeamB
         var teamA = null
@@ -272,9 +270,9 @@ module.exports = class WarManager {
                     name: bot.user.username,
                     icon_url: bot.user.avatarURL()
                 },
-                thumbnail: {
-                    url: bot.user.avatarURL()
-                },
+                // thumbnail: {
+                //     url: bot.user.avatarURL()
+                // },
                 title: "RESULT: " + winner.teamName + " Vs " + looser.teamName,
                 description: winner.teamName + " won the war against " + looser.teamName + ".\n" +
                     winnerClan.stars + "⭐️ | " + looserClan.stars + "⭐️\n" +
@@ -299,9 +297,9 @@ module.exports = class WarManager {
                     name: bot.user.username,
                     icon_url: bot.user.avatarURL()
                 },
-                thumbnail: {
-                    url: bot.user.avatarURL()
-                },
+                // thumbnail: {
+                //     url: bot.user.avatarURL()
+                // },
                 title: "RESULT: " + winner.teamName + " Vs " + looser.teamName,
                 description: winner.teamName + " Draw against " + looser.teamName + ".\n" +
                     winnerClan.stars + "⭐️ | " + looserClan.stars + "⭐️\n" +
