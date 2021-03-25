@@ -46,14 +46,14 @@ module.exports = class PlayerManger extends Command {
                 }).then(() => {
                     message.author.send(
                         {embed: {
-                            color: "eaa403",
+                            color: "07E900",
                             author: {
                                 name: bot.user.username,
                                 icon_url: bot.user.avatarURL()
                             },
-                            thumbnail: {
-                                url: bot.user.avatarURL()
-                            },
+                            // thumbnail: {
+                            //     url: bot.user.avatarURL()
+                            // },
                             title: "Player created",
                             description: "The player " + playerName + " has been created and linked to the tag " + playerTag + ".",
                             timestamp: new Date(),
@@ -71,14 +71,14 @@ module.exports = class PlayerManger extends Command {
             else {
                 message.reply(                       
                     {embed: {
-                    color: "eaa403",
+                    color: "E90000",
                     author: {
                         name: bot.user.username,
                         icon_url: bot.user.avatarURL()
                     },
-                    thumbnail: {
-                        url: bot.user.avatarURL()
-                    },
+                    // thumbnail: {
+                    //     url: bot.user.avatarURL()
+                    // },
                     title: "Player: error",
                     description: "There is a problem with the player tag.",
                     timestamp: new Date(),

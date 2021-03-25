@@ -121,9 +121,9 @@ module.exports = class Matchmaking {
                         name: bot.user.username,
                         icon_url: bot.user.avatarURL()
                     },
-                    thumbnail: {
-                        url: bot.user.avatarURL()
-                    },
+                    // thumbnail: {
+                    //     url: bot.user.avatarURL()
+                    // },
                     title: teamA.teamName + " Vs " + teamB.teamName,
                     description: teamA.teamName + "'s leader is " + teamA.leaderTag + " and " + teamB.teamName + "'s leader is " + teamB.leaderTag + "\n" +
                         teamA.teamName + " will play the war at " + teamA.clanTagInGame + " and " + teamB.teamName + " will be at " + teamB.clanTagInGame + "\n" +

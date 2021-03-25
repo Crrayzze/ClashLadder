@@ -63,14 +63,14 @@ module.exports = class TeamManager extends Command {
                 }).then(() => {
                     message.author.send(
                         {embed: {
-                            color: "eaa403",
+                            color: "07E900",
                             author: {
                                 name: bot.user.username,
                                 icon_url: bot.user.avatarURL()
                             },
-                            thumbnail: {
-                                url: bot.user.avatarURL()
-                            },
+                            // thumbnail: {
+                            //     url: bot.user.avatarURL()
+                            // },
                             title: "Team created",
                             description: teamName + " has been created and linked to the clan " + clanTag + "\nThe team leader is: " + teamLeaderTag + "\nYour secret key is " + newSecretKey + ". Please don't loose it, it will be necessary later!\n Welcome in CLashLadder!",
                             timestamp: new Date(),
@@ -137,14 +137,14 @@ module.exports = class TeamManager extends Command {
                     if (teamLookForAWar)
                         message.author.send(
                             {embed: {
-                                color: "eaa403",
+                                color: "E90000",
                                 author: {
                                     name: bot.user.username,
                                     icon_url: bot.user.avatarURL()
                                 },
-                                thumbnail: {
-                                    url: bot.user.avatarURL()
-                                },
+                                // thumbnail: {
+                                //     url: bot.user.avatarURL()
+                                // },
                                 title: "Matchmaking: error",
                                 description: "You are already in matchmaking looking for a war!",
                                 timestamp: new Date(),
@@ -157,14 +157,14 @@ module.exports = class TeamManager extends Command {
                     if (teamInWar)
                         message.author.send(
                             {embed: {
-                                color: "eaa403",
+                                color: "E90000",
                                 author: {
                                     name: bot.user.username,
                                     icon_url: bot.user.avatarURL()
                                 },
-                                thumbnail: {
-                                    url: bot.user.avatarURL()
-                                },
+                                // thumbnail: {
+                                //     url: bot.user.avatarURL()
+                                // },
                                 title: "Matchmaking: error",
                                 description: "You are already in  a war!",
                                 timestamp: new Date(),
@@ -186,14 +186,14 @@ module.exports = class TeamManager extends Command {
                     }).then(response => {
                         message.author.send(
                             {embed: {
-                                color: "eaa403",
+                                color: "07E900",
                                 author: {
                                     name: bot.user.username,
                                     icon_url: bot.user.avatarURL()
                                 },
-                                thumbnail: {
-                                    url: bot.user.avatarURL()
-                                },
+                                // thumbnail: {
+                                //     url: bot.user.avatarURL()
+                                // },
                                 title: "Matchmaking",
                                 description: "Matchmaking activated!\nYou are now on the waiting list. Please wait...",
                                 timestamp: new Date(),
@@ -247,14 +247,14 @@ module.exports = class TeamManager extends Command {
                     if (!teamLookForAWar) {
                         message.author.send(
                             {embed: {
-                                color: "eaa403",
+                                color: "E90000",
                                 author: {
                                     name: bot.user.username,
                                     icon_url: bot.user.avatarURL()
                                 },
-                                thumbnail: {
-                                    url: bot.user.avatarURL()
-                                },
+                                // thumbnail: {
+                                //     url: bot.user.avatarURL()
+                                // },
                                 title: "Matchmaking: error",
                                 description: "You are not already in matchmaking!",
                                 timestamp: new Date(),
@@ -275,14 +275,14 @@ module.exports = class TeamManager extends Command {
                         }).then(response => {
                             message.author.send(
                             {embed: {
-                                color: "eaa403",
+                                color: "07E900",
                                 author: {
                                     name: bot.user.username,
                                     icon_url: bot.user.avatarURL()
                                 },
-                                thumbnail: {
-                                    url: bot.user.avatarURL()
-                                },
+                                // thumbnail: {
+                                //     url: bot.user.avatarURL()
+                                // },
                                 title: "Matchmaking",
                                 description: "Matchmaking is now desactivated. See you soon 😉",
                                 timestamp: new Date(),
@@ -294,14 +294,14 @@ module.exports = class TeamManager extends Command {
                             console.log(response)
                         }).catch(error => {
                             message.author.send({embed: {
-                                color: "eaa403",
+                                color: "E90000",
                                 author: {
                                     name: bot.user.username,
                                     icon_url: bot.user.avatarURL()
                                 },
-                                thumbnail: {
-                                    url: bot.user.avatarURL()
-                                },
+                                // thumbnail: {
+                                //     url: bot.user.avatarURL()
+                                // },
                                 title: "Matchmaking: error",
                                 description: "Error during the Matchmaking 😓",
                                 timestamp: new Date(),
